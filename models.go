@@ -1,12 +1,16 @@
+package main
+
+import "gorm.io/gorm"
+
 type User struct {
-    gorm.Model
-    Username string `gorm:"unique"`
-    Password string
+	gorm.Model
+	Username string `gorm:"unique"`
+	Password string
 }
 
 type Video struct {
-    gorm.Model
-    UserID uint
-    Title  string
-    URL    string
+	gorm.Model
+	UserID uint
+	Title  string
+	URL    string
 }
