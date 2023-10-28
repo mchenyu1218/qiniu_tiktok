@@ -2,8 +2,8 @@ package main
 
 import (
 	"Projectdouy/route"
-
 	"gorm.io/driver/mysql"
+
 	"gorm.io/gorm"
 )
 
@@ -15,6 +15,10 @@ func main() {
 	dsn := "root:123456@tcp(127.0.0.1:3306)/?charset=utf8mb4&parseTime=True&loc=Local"
 
 	_db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic("连接数据库失败, error=" + err.Error())
+	}
+
 	if err != nil {
 		panic("连接数据库失败, error=" + err.Error())
 	}

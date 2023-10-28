@@ -5,6 +5,7 @@ type Response struct {
 	StatusMsg  string `json:"status_msg,omitempty"`
 }
 
+// 视频类
 type Video struct {
 	Id            int64  `json:"id"`
 	Author        User   `json:"author" gorm:"references:ID"`
@@ -16,6 +17,7 @@ type Video struct {
 	Title         string `json:"title"`
 }
 
+// 用户类
 type User struct {
 	Id            int64  `json:"id" gorm:""`
 	Name          string `json:"name"`
