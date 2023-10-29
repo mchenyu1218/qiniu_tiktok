@@ -57,6 +57,7 @@ func NewVideoDaoInstance() *VideoDao {
 	return videoDao
 }
 
+// 查，获取视频列表
 func (videoDao *VideoDao) GetPublishList(UserID int64) ([]common.Video, error) {
 	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count," +
 		" video.author_id,user.username as name,user.follow_count,user.follower_count," +

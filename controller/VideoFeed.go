@@ -3,6 +3,7 @@ package controller
 import (
 	common "Projectdouy/commom"
 	"Projectdouy/service"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 )
@@ -11,6 +12,7 @@ import (
 
 // 获取视频流类
 type VideoFeedRequest struct {
+	UserID     int64  `form:"user_id" json:"user_id" validator:"omitempty"`
 	LatestTime int64  `form:"latest_time" json:"latest_time" validator:"omitempty"`
 	Token      string `form:"token" json:"token" validator:"omitempty"`
 }
@@ -34,10 +36,12 @@ func Feed(c *gin.Context) {
 	response.StatusCode = 0
 	response.StatusMsg = "success"
 	//获取用户id
-	UserID, err := c.Get("UserID")
-	if !err {
-		UserID = -1
-	}
+	//UserID, err := c.Get("UserID")
+	//if !err {
+	//	UserID = -1
+	//}
+	UserID := request.UserID
+	fmt.Print(UserID)
 	//查询当前用户下所有视频
 	VideoList, NextTime, error := service.Feed(15, UserID, request.LatestTime)
 	if error != nil {
