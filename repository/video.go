@@ -181,3 +181,118 @@ func (videoDao *VideoDao) Addvideo(authorId int64, playUrl string, coverUrl stri
 	})
 	return err
 }
+
+// 查，获取视频列表
+func (videoDao *VideoDao) GetVideosbytag(Tag string) ([]common.Video, error) {
+	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count," +
+		" video.author_id,user.username as name,user.follow_count,user.follower_count" +
+		" from user join video" +
+		" on video.author_id = user.id" +
+		" where video.tag = '" + Tag + "' " +
+		" order by video.create_time"
+	fmt.Sprint(VideoListSQL)
+	fmt.Sprint(Tag)
+
+	Db.Raw(VideoListSQL).Scan(&video_result)
+	var VideoList = make([]common.Video, len(video_result))
+	for i := 0; i < len(video_result); i++ {
+		VideoList[i].Author.Id = video_result[i].AuthorId
+		VideoList[i].Author.FollowCount = video_result[i].FollowCount
+		VideoList[i].Author.FollowerCount = video_result[i].FollowerCount
+		VideoList[i].Author.Name = video_result[i].Name
+		VideoList[i].Author.IsFollow = false
+		VideoList[i].Id = video_result[i].Id
+		VideoList[i].PlayUrl = video_result[i].PlayUrl
+		VideoList[i].CoverUrl = video_result[i].CoverUrl
+		VideoList[i].IsFavorite = false
+		VideoList[i].Title = video_result[i].Title
+		VideoList[i].CommentCount = video_result[i].CommentCount
+		VideoList[i].FavoriteCount = video_result[i].FavoriteCount
+	}
+	return VideoList, nil
+}
+
+// 查，获取视频列表
+func (videoDao *VideoDao) GetallVideos() ([]common.Video, error) {
+	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count," +
+		" video.author_id,user.username as name,user.follow_count,user.follower_count" +
+		" from user join video" +
+		" on video.author_id = user.id" +
+		" order by video.create_time"
+
+	Db.Raw(VideoListSQL).Scan(&video_result)
+	var VideoList = make([]common.Video, len(video_result))
+	for i := 0; i < len(video_result); i++ {
+		VideoList[i].Author.Id = video_result[i].AuthorId
+		VideoList[i].Author.FollowCount = video_result[i].FollowCount
+		VideoList[i].Author.FollowerCount = video_result[i].FollowerCount
+		VideoList[i].Author.Name = video_result[i].Name
+		VideoList[i].Author.IsFollow = false
+		VideoList[i].Id = video_result[i].Id
+		VideoList[i].PlayUrl = video_result[i].PlayUrl
+		VideoList[i].CoverUrl = video_result[i].CoverUrl
+		VideoList[i].IsFavorite = false
+		VideoList[i].Title = video_result[i].Title
+		VideoList[i].CommentCount = video_result[i].CommentCount
+		VideoList[i].FavoriteCount = video_result[i].FavoriteCount
+	}
+	return VideoList, nil
+}
+
+// 查，获取视频列表
+func (videoDao *VideoDao) GetVideosbyuserid(Tag string) ([]common.Video, error) {
+	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count," +
+		" video.author_id,user.username as name,user.follow_count,user.follower_count" +
+		" from user join video" +
+		" on video.author_id = user.id" +
+		" where video.tag = '" + Tag + "' " +
+		" order by video.create_time"
+	fmt.Sprint(VideoListSQL)
+	fmt.Sprint(Tag)
+
+	Db.Raw(VideoListSQL).Scan(&video_result)
+	var VideoList = make([]common.Video, len(video_result))
+	for i := 0; i < len(video_result); i++ {
+		VideoList[i].Author.Id = video_result[i].AuthorId
+		VideoList[i].Author.FollowCount = video_result[i].FollowCount
+		VideoList[i].Author.FollowerCount = video_result[i].FollowerCount
+		VideoList[i].Author.Name = video_result[i].Name
+		VideoList[i].Author.IsFollow = false
+		VideoList[i].Id = video_result[i].Id
+		VideoList[i].PlayUrl = video_result[i].PlayUrl
+		VideoList[i].CoverUrl = video_result[i].CoverUrl
+		VideoList[i].IsFavorite = false
+		VideoList[i].Title = video_result[i].Title
+		VideoList[i].CommentCount = video_result[i].CommentCount
+		VideoList[i].FavoriteCount = video_result[i].FavoriteCount
+	}
+	return VideoList, nil
+}
+
+func (videoDao *VideoDao) GetVideosbyusername(Username string) ([]common.Video, error) {
+	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count," +
+		" video.author_id,user.username as name,user.follow_count,user.follower_count" +
+		" from user join video" +
+		" on video.author_id = user.id" +
+		" where user.username = '" + Username + "' " +
+		" order by video.create_time"
+	fmt.Sprint(Username)
+
+	Db.Raw(VideoListSQL).Scan(&video_result)
+	var VideoList = make([]common.Video, len(video_result))
+	for i := 0; i < len(video_result); i++ {
+		VideoList[i].Author.Id = video_result[i].AuthorId
+		VideoList[i].Author.FollowCount = video_result[i].FollowCount
+		VideoList[i].Author.FollowerCount = video_result[i].FollowerCount
+		VideoList[i].Author.Name = video_result[i].Name
+		VideoList[i].Author.IsFollow = false
+		VideoList[i].Id = video_result[i].Id
+		VideoList[i].PlayUrl = video_result[i].PlayUrl
+		VideoList[i].CoverUrl = video_result[i].CoverUrl
+		VideoList[i].IsFavorite = false
+		VideoList[i].Title = video_result[i].Title
+		VideoList[i].CommentCount = video_result[i].CommentCount
+		VideoList[i].FavoriteCount = video_result[i].FavoriteCount
+	}
+	return VideoList, nil
+}

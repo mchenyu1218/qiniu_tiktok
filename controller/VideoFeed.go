@@ -3,7 +3,7 @@ package controller
 import (
 	common "Projectdouy/commom"
 	"Projectdouy/service"
-	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"log"
 )
@@ -15,6 +15,7 @@ type VideoFeedRequest struct {
 	UserID     int64  `form:"user_id" json:"user_id" validator:"omitempty"`
 	LatestTime int64  `form:"latest_time" json:"latest_time" validator:"omitempty"`
 	Token      string `form:"token" json:"token" validator:"omitempty"`
+	Tag        string `form':"tag" json:"tag"    validator:"omitempty"`
 }
 
 type VideoFeedResponse struct {
@@ -24,13 +25,25 @@ type VideoFeedResponse struct {
 }
 
 func Feed(c *gin.Context) {
-	var request VideoFeedRequest
-	//参数绑定
-	if err := c.Bind(&request); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
-		log.Println("request参数绑定失败")
+
+	var response = &VideoFeedResponse{}
+	response.StatusCode = 0
+	response.StatusMsg = "success"
+
+	//查询当前用户下所有视频
+	VideoList, error := service.Feed()
+	if error != nil {
+		response.StatusCode = 1
+		response.StatusMsg = "error"
+		log.Println(error)
+		c.JSON(200, response)
 		return
 	}
+	response.VideoList = VideoList
+	c.JSON(200, response)
+}
+
+func FeedByTag(c *gin.Context) {
 
 	var response = &VideoFeedResponse{}
 	response.StatusCode = 0
@@ -40,10 +53,10 @@ func Feed(c *gin.Context) {
 	//if !err {
 	//	UserID = -1
 	//}
-	UserID := request.UserID
-	fmt.Print(UserID)
+	Tag := c.Query("tag")
+
 	//查询当前用户下所有视频
-	VideoList, NextTime, error := service.Feed(15, UserID, request.LatestTime)
+	VideoList, error := service.Feedbytag(15, Tag)
 	if error != nil {
 		response.StatusCode = 1
 		response.StatusMsg = "error"
@@ -52,6 +65,30 @@ func Feed(c *gin.Context) {
 		return
 	}
 	response.VideoList = VideoList
-	response.NextTime = NextTime
+	c.JSON(200, response)
+}
+
+func Feedbyusername(c *gin.Context) {
+
+	var response = &VideoFeedResponse{}
+	response.StatusCode = 0
+	response.StatusMsg = "success"
+	//获取用户id
+	//UserID, err := c.Get("UserID")
+	//if !err {
+	//	UserID = -1
+	//}
+	Username := c.Query("username")
+
+	//查询当前用户下所有视频
+	VideoList, error := service.Feedbyusername(Username)
+	if error != nil {
+		response.StatusCode = 1
+		response.StatusMsg = "error"
+		log.Println(error)
+		c.JSON(200, response)
+		return
+	}
+	response.VideoList = VideoList
 	c.JSON(200, response)
 }

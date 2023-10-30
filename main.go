@@ -2,6 +2,7 @@ package main
 
 import (
 	"Projectdouy/route"
+	"Projectdouy/utils"
 	"gorm.io/gorm"
 )
 
@@ -14,6 +15,8 @@ func main() {
 	r := routes.SetRouter()
 
 	r.MaxMultipartMemory = 128 << 20 //设置视频最大上传容量
+	//添加中间件
+	r.Use(utils.JwtVerify)
 
 	//启动
 	r.Run(":8081")
