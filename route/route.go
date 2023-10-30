@@ -14,7 +14,16 @@ func SetRouter() *gin.Engine {
 	apiRouter := r.Group("/tiktok")
 
 	// basic apis
-	apiRouter.GET("/feed/", controller.Feed)
+	//apiRouter.GET("/feedbyuserid", controller.Feedbyuserid)
+
+	apiRouter.GET("/feedallvideo", controller.Feed)
+	apiRouter.GET("/feedbytag", controller.FeedByTag)
+	apiRouter.GET("/feedbyusername", controller.Feedbyusername)
+
+	//apiRouter.GET("/user/", controller.UserInfo)
+	apiRouter.POST("/user/register", controller.Register)
+	apiRouter.POST("/user/login", controller.Login)
+	apiRouter.POST("/user/modeify", controller.Usermodify)
 
 	return r
 }
