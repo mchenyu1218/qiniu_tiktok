@@ -19,6 +19,8 @@ func SetRouter() *gin.Engine {
 	apiRouter.GET("/feedallvideo", controller.Feed)
 	apiRouter.GET("/feedbytag", controller.FeedByTag)
 	apiRouter.GET("/feedbyusername", controller.Feedbyusername)
+	apiRouter.POST("/deleteVideo", controller.DeleteByVideoID)
+	apiRouter.POST("/updateVideo", controller.UpdateByVideoID)
 
 	//apiRouter.GET("/user/", controller.UserInfo)
 	apiRouter.POST("/user/register", controller.Register)

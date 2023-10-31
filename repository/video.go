@@ -296,3 +296,27 @@ func (videoDao *VideoDao) GetVideosbyusername(Username string) ([]common.Video, 
 	}
 	return VideoList, nil
 }
+
+// DeleteVideo 根据 videoID 删除视频记录
+func (videoDao *VideoDao) DeleteVideo(videoID string) error {
+    // 将is_deleted字段的值修改为1
+    deleteSQL := "UPDATE video SET is_deleted = 1 WHERE id = ?"
+    result := Db.Exec(deleteSQL, videoID)
+    if result.Error != nil {
+        return result.Error
+    }
+
+    return nil
+}
+
+func (videoDao *VideoDao) UpdateVideoDetails(videoID string, title, description, tag string) error {
+    // 准备 SQL 语句以更新视频详情，同时将 update_time 设为当前时间
+    updateSQL := "UPDATE video SET title = ?, description = ?, tag = ?, update_time = NOW() WHERE id = ?"
+    // 执行 SQL 语句来更新视频详情，传递 title, description, tag 和 videoID 作为参数
+    result := Db.Exec(updateSQL, title, description, tag, videoID)
+    if result.Error != nil {
+        return result.Error
+    }
+
+    return nil
+}
