@@ -24,6 +24,8 @@ func SetRouter() *gin.Engine {
 	apiRouter.GET("/feedalluser", controller.Feedalluser)
 	//进行关注
 	apiRouter.GET("/collectfeed", controller.CollectAction)
+	apiRouter.POST("/deleteVideo", controller.DeleteByVideoID)
+	apiRouter.POST("/updateVideo", controller.UpdateByVideoID)
 
 	//apiRouter.GET("/user/", controller.UserInfo)
 	apiRouter.POST("/user/register", controller.Register)

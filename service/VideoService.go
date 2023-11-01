@@ -55,3 +55,21 @@ func Feedalluser(UserId any) ([]common.Video, error) {
 
 	return videos, error
 }
+
+func DeleteVideo(videoID string) error {
+	fmt.Println(videoID)
+	error := videoDao.DeleteVideo(videoID)
+	if error != nil {
+		log.Println("videoDao.Delete 出错")
+	}
+	return error
+}
+
+func UpdateVideo(videoID string, title, description, tag string) error {
+	fmt.Println(videoID)
+	error := videoDao.UpdateVideoDetails(videoID, title, description, tag)
+	if error != nil {
+		log.Println("videoDao.Delete 出错")
+	}
+	return error
+}
