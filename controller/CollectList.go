@@ -17,7 +17,14 @@ type CollectListResponse struct {
 	VideoList []common.Video `json:"video_list"`
 }
 
-// FavoriteList LikeList 点赞列表
+// @Summary	获取收藏的视频列表
+// @Produce	json
+// @Param		user_id	query		int64				false	"用户id"
+// @Param		Token	query		string				false	"验证信息"
+// @Success	200		{object}	CollectListResponse	 "成功"
+// @Failure	400		{object}	CollectListResponse	 "请求错误"
+// @Failure	500		{object}	CollectListResponse	 "内部错误"
+// @Router		/collect/list [get]
 func CollectList(c *gin.Context) {
 	var request CollectListRequest
 	var response = &CollectListResponse{}

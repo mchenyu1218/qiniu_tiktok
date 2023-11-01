@@ -18,7 +18,16 @@ type CollectResponse struct {
 	common.Response
 }
 
-// CollectAction
+// @Summary	进行收藏操作，1收藏2取消
+// @Produce	json
+// @Param		user_id		query		int64			false	"用户id"
+// @Param		Token		query		string			false	"验证信息"
+// @Param		VideoID		query		int64			false	"视频id"
+// @Param		ActionType	query		int				false	"行动目标"
+// @Success	200			{object}	CollectResponse	"成功"
+// @Failure	400			{object}	CollectResponse	"请求错误"
+// @Failure	500			{object}	CollectResponse	"内部错误"
+// @Router		/collect/action [post]
 func CollectAction(c *gin.Context) {
 	var request CollectRequest
 	var response = &CollectResponse{}

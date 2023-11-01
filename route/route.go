@@ -3,6 +3,8 @@ package routes
 import (
 	"Projectdouy/controller"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func SetRouter() *gin.Engine {
@@ -15,6 +17,7 @@ func SetRouter() *gin.Engine {
 
 	// basic apis
 	//apiRouter.GET("/feedbyuserid", controller.Feedbyuserid)
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	apiRouter.GET("/feedallvideo", controller.Feed)
 	apiRouter.GET("/feedbytag", controller.FeedByTag)
