@@ -23,13 +23,15 @@ func SetRouter() *gin.Engine {
 	//查询视频的同时查询关注列表和是否关注该博主
 	apiRouter.GET("/feedalluser", controller.Feedalluser)
 	//进行关注
-	apiRouter.GET("/collectfeed", controller.CollectAction)
+
 	apiRouter.POST("/deleteVideo", controller.DeleteByVideoID)
 	apiRouter.POST("/updateVideo", controller.UpdateByVideoID)
 
 	apiRouter.POST("/user/register", controller.Register)
 	apiRouter.POST("/user/login", controller.Login)
 	apiRouter.POST("/user/modeify", controller.Usermodify)
+
+	apiRouter.GET("/user/search/:UserID", controller.UserInfo)
 	//收藏该视频
 
 	apiRouter.POST("/collect/action", controller.CollectAction)

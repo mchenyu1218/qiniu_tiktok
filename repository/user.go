@@ -29,7 +29,7 @@ func NewUserDaoInstance() *UserDao {
 
 func (userDao *UserDao) GetByID(id int64) (User, error) {
 	u := User{}
-	result := Db.Where("id = ?", id).Take(&u)
+	result := Db.Table("user").Where("id = ?", id).Take(&u)
 
 	//错误处理
 	if result.Error != nil {

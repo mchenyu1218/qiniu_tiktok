@@ -26,7 +26,7 @@ func CollectAction(c *gin.Context) {
 		response.StatusCode = 1
 		response.StatusMsg = "参数解析失败"
 		c.JSON(400, response)
-		log.Println("赞操作request参数绑定失败")
+		log.Println("收藏操作request参数绑定失败")
 		return
 	}
 
