@@ -34,6 +34,10 @@ func SetRouter() *gin.Engine {
 	//收藏该视频
 
 	apiRouter.POST("/collect/action", controller.CollectAction)
+	apiRouter.GET("/collect/list", controller.CollectList)
+	//点赞该视频
+	apiRouter.POST("/favorite/action/", controller.FavoriteAction)
+	//apiRouter.GET("/favorite/list/", controller.FavoriteList)
 
 	//apiRouter.POST("/favorite/Collect/", controller.Collect)
 	//apiRouter.GET("/favorite/list/", controller.FavoriteList)

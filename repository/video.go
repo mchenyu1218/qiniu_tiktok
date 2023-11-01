@@ -127,18 +127,16 @@ func (videoDao VideoDao) Feedalluser(UserID any) ([]common.Video, error) {
 	return VideoList, nil
 }
 
-func (videoDao VideoDao) GetLikeList(MyID int64, UserID int64) ([]common.Video, error) {
+// 获取收藏的视频
+func (videoDao VideoDao) GetCollectList(UserID int64) ([]common.Video, error) {
 
 	var res []result
 	VideoListSQL := "select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count ,video.collect_count," +
-		" video.author_id,user.username as name,user.follow_count,user.follower_count,1 as is_favorite," +
-		" IFNULL( (SELECT 1 FROM fans WHERE fans.fans_id =  " + fmt.Sprintf("%v", MyID) +
-		" and fans.blogger_id =  " + fmt.Sprintf("%v", UserID) +
-		" LIMIT 1) , false ) as is_follow" +
+		" video.author_id,user.username as name,user.follow_count,user.follower_count,1 as is_collect" +
 		" from user join video" +
 		" on video.author_id = user.id" +
-		" where IFNULL( (SELECT 1 FROM favorite WHERE favorite.user_id =  " + fmt.Sprintf("%v", MyID) +
-		" and favorite.video_id = video.id LIMIT 1) , false )  = 1"
+		" where IFNULL( (SELECT 1 FROM collect WHERE collect.user_id =  " + fmt.Sprintf("%v", UserID) +
+		" and collect.video_id = video.id LIMIT 1) , false )  = 1"
 	Db.Raw(VideoListSQL).Scan(&res)
 	var VideoList = make([]common.Video, len(res))
 	for i := 0; i < len(res); i++ {
@@ -146,15 +144,16 @@ func (videoDao VideoDao) GetLikeList(MyID int64, UserID int64) ([]common.Video, 
 		VideoList[i].Author.FollowCount = res[i].FollowCount
 		VideoList[i].Author.FollowerCount = res[i].FollowerCount
 		VideoList[i].Author.Name = res[i].Name
-		VideoList[i].Author.IsFollow = res[i].IsFollow
+		VideoList[i].Author.IsFollow = false
 		VideoList[i].Id = res[i].Id
 		VideoList[i].PlayUrl = res[i].PlayUrl
 		VideoList[i].CoverUrl = res[i].CoverUrl
-		VideoList[i].IsFavorite = res[i].IsFavorite
+		VideoList[i].IsFavorite = false
+		VideoList[i].IsCollect = true
 		VideoList[i].Title = res[i].Title
 		VideoList[i].CommentCount = res[i].CommentCount
 		VideoList[i].FavoriteCount = res[i].FavoriteCount
-		VideoList[i].CollectCount = video_result[i].CollectCount
+		VideoList[i].CollectCount = res[i].CollectCount
 	}
 	return VideoList, nil
 }
