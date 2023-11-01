@@ -70,3 +70,31 @@ func (userDao *UserDao) ModifyUser(Username string, Password string) (User, erro
 	result := Db.Table("user").Where("username", Username).Update("password", Password) //
 	return user, result.Error
 }
+
+// FollowDesc 关注减一
+func (userDao *UserDao) FollowDesc(UserID int64) error {
+	re := Db.Table("user").Model(&User{}).Where("id = ?", UserID).UpdateColumn("follow_count", gorm.Expr("follow_count - ?", 1))
+	return re.Error
+}
+
+// FollowInsc 关注加一
+
+func (userDao *UserDao) FollowInsc(UserID int64) error {
+	re := Db.Table("user").Model(&User{}).Where("id = ?", UserID).UpdateColumn("follow_count", gorm.Expr("follow_count + 1"))
+	return re.Error
+}
+
+// FollowDesc 粉丝减一
+
+func (userDao *UserDao) FollowerDesc(UserID int64) error {
+	re := Db.Table("user").Model(&User{}).Where("id = ?", UserID).UpdateColumn("follower_count", gorm.Expr("follower_count - ?", 1))
+	return re.Error
+}
+
+// FollowDesc 粉丝加一
+
+func (userDao *UserDao) FollowerInsc(UserID int64) error {
+	re := Db.Table("user").Model(&User{}).Where("id = ?", UserID).UpdateColumn("follower_count", gorm.Expr("follower_count + 1"))
+
+	return re.Error
+}

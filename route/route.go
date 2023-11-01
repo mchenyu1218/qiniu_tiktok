@@ -27,7 +27,6 @@ func SetRouter() *gin.Engine {
 	apiRouter.POST("/deleteVideo", controller.DeleteByVideoID)
 	apiRouter.POST("/updateVideo", controller.UpdateByVideoID)
 
-	//apiRouter.GET("/user/", controller.UserInfo)
 	apiRouter.POST("/user/register", controller.Register)
 	apiRouter.POST("/user/login", controller.Login)
 	apiRouter.POST("/user/modeify", controller.Usermodify)
@@ -37,8 +36,9 @@ func SetRouter() *gin.Engine {
 	apiRouter.GET("/collect/list", controller.CollectList)
 	//点赞该视频
 	apiRouter.POST("/favorite/action/", controller.FavoriteAction)
-	//apiRouter.GET("/favorite/list/", controller.FavoriteList)
 
+	//关注该用户
+	apiRouter.POST("/relation/action", controller.RelationAction)
 	//apiRouter.POST("/favorite/Collect/", controller.Collect)
 	//apiRouter.GET("/favorite/list/", controller.FavoriteList)
 	return r

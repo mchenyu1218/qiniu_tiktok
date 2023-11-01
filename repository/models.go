@@ -35,6 +35,17 @@ type Video struct {
 	CollectCount  int       `gorm:"column:collect_count;NOT NULL" json:"collect_count"`     // 收藏数
 }
 
+// Fans 粉丝表
+// 粉丝表（关注表）当用户A关注用户B时添加一条数据，反之删除对应数据
+type Fans struct {
+	ID         int64     `gorm:"column:id;AUTO_INCREMENT;primary_key" json:"id"`
+	CreateTime time.Time `gorm:"column:create_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"create_time"`
+	UpdateTime time.Time `gorm:"column:update_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"update_time"`
+	IsDeleted  int       `gorm:"column:is_deleted;default:0;NOT NULL" json:"is_deleted"` // (0-, 1-)
+	BloggerID  int64     `gorm:"column:blogger_id;NOT NULL" json:"blogger_id"`           // id
+	FansID     int64     `gorm:"column:fans_id;NOT NULL" json:"fans_id"`                 // id
+}
+
 // 点赞表(当用户对某个视屏点赞，则添加一条数据。取消点赞则删除对应数据)
 type Favorite struct {
 	ID         int64     `gorm:"column:id;AUTO_INCREMENT;primary_key" json:"id"`
