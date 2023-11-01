@@ -13,7 +13,6 @@ var (
 	videoDao = repository.NewVideoDaoInstance()
 )
 
-// Feed 返回指定投稿时间之后的amount个视屏
 func Feedbyusername(Username string) ([]common.Video, error) {
 
 	fmt.Println(Username)
@@ -41,6 +40,17 @@ func Feed() ([]common.Video, error) {
 	videos, error := videoDao.GetallVideos()
 	if error != nil {
 		log.Println("videoDao.Feed 出错")
+	}
+
+	return videos, error
+}
+
+func Feedalluser(UserId any) ([]common.Video, error) {
+
+	fmt.Println(UserId)
+	videos, error := videoDao.Feedalluser(UserId)
+	if error != nil {
+		log.Println("videoDao.Feedalluser 出错")
 	}
 
 	return videos, error

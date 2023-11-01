@@ -15,6 +15,7 @@ type User struct {
 	CreateTime    time.Time `gorm:"column:create_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"create_time"`
 	UpdateTime    time.Time `gorm:"column:update_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"update_time"`
 	IsDeleted     int       `gorm:"column:is_deleted;default:0;NOT NULL" json:"is_deleted"` // (0-, 1-)
+
 }
 
 // `video`
@@ -25,10 +26,29 @@ type Video struct {
 	PlayUrl       string    `gorm:"column:play_url;NOT NULL" json:"play_url"`             // 播放地址
 	CoverUrl      string    `gorm:"column:cover_url;NOT NULL" json:"cover_url"`           // 封面地址
 	Title         string    `gorm:"column:title;NOT NULL" json:"title"`                   // 标题
-	favoriteCount int       `gorm:"column:favorite_count;NOT NULL" json:"favorite_count"` // 点赞数
+	FavoriteCount int       `gorm:"column:favorite_count;NOT NULL" json:"favorite_count"` // 点赞数
 	PlayCounts    int       `gorm:"column:play_counts;NOT NULL" json:"play_counts"`       // 播放次数
 	CommentCount  int       `gorm:"column:comment_count;NOT NULL" json:"comment_count"`   // 评论次数
 	CreateTime    time.Time `gorm:"column:create_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"create_time"`
 	UpdateTime    time.Time `gorm:"column:update_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"update_time"`
 	IsDeleted     int       `gorm:"column:is_deleted;default:0;NOT NULL" json:"is_deleted"` // (0-, 1-)
+	CollectCount  int       `gorm:"column:collect_count;NOT NULL" json:"collect_count"`     // 收藏数
+}
+
+// 点赞表(当用户对某个视屏点赞，则添加一条数据。取消点赞则删除对应数据)
+type Favorite struct {
+	ID         int64     `gorm:"column:id;AUTO_INCREMENT;primary_key" json:"id"`
+	UserID     int64     `gorm:"column:user_id;NOT NULL" json:"user_id"`   // id
+	VideoID    int64     `gorm:"column:video_id;NOT NULL" json:"video_id"` // id
+	CreateTime time.Time `gorm:"column:create_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"create_time"`
+	UpdateTime time.Time `gorm:"column:update_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"update_time"`
+}
+
+// 收藏表(当用户对某个视屏点赞，则添加一条数据。取消点赞则删除对应数据)
+type Collect struct {
+	ID         int64     `gorm:"column:id;AUTO_INCREMENT;primary_key" json:"id"`
+	UserID     int64     `gorm:"column:user_id;NOT NULL" json:"user_id"`   // id
+	VideoID    int64     `gorm:"column:video_id;NOT NULL" json:"video_id"` // id
+	CreateTime time.Time `gorm:"column:create_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"create_time"`
+	UpdateTime time.Time `gorm:"column:update_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"update_time"`
 }

@@ -22,13 +22,9 @@ var NotNeedToken = make(map[string]int) //0不需要验证，1表示可选（有
 
 func init() {
 	//将不需要验证token的路径添加到集合中
-	NotNeedToken["/tiktok/user/register/"] = 1
-	NotNeedToken["/tiktok/user/login/"] = 1
-	NotNeedToken["/tiktok/feedallvideo/"] = 1
-	NotNeedToken["/tiktok/feed/"] = 1
-	NotNeedToken["/tiktok/feedbytag/"] = 1
-	NotNeedToken["/tiktok/feedbyusername/"] = 1
-
+	NotNeedToken["/douyin/user/register/"] = 0
+	NotNeedToken["/douyin/user/login/"] = 0
+	NotNeedToken["/douyin/feed/"] = 1
 }
 
 // TokenExpireDuration 设置过期时间

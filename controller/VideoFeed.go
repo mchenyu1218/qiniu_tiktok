@@ -3,6 +3,7 @@ package controller
 import (
 	common "Projectdouy/commom"
 	"Projectdouy/service"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"log"
@@ -82,6 +83,32 @@ func Feedbyusername(c *gin.Context) {
 
 	//查询当前用户下所有视频
 	VideoList, error := service.Feedbyusername(Username)
+	if error != nil {
+		response.StatusCode = 1
+		response.StatusMsg = "error"
+		log.Println(error)
+		c.JSON(200, response)
+		return
+	}
+	response.VideoList = VideoList
+	c.JSON(200, response)
+}
+
+func Feedalluser(c *gin.Context) {
+	var request VideoFeedRequest
+	//参数绑定
+	if err := c.Bind(&request); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		log.Println("request参数绑定失败")
+		return
+	}
+	var response = &VideoFeedResponse{}
+	response.StatusCode = 0
+	response.StatusMsg = "success"
+	fmt.Print("dasd")
+	fmt.Print(request.UserID)
+	//查询当前用户下所有视频
+	VideoList, error := service.Feedalluser(request.UserID)
 	if error != nil {
 		response.StatusCode = 1
 		response.StatusMsg = "error"

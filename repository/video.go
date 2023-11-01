@@ -4,7 +4,6 @@ import (
 	common "Projectdouy/commom"
 	"fmt"
 	"gorm.io/gorm"
-	"strconv"
 	"sync"
 )
 
@@ -26,7 +25,9 @@ type result = struct {
 	FavoriteCount int64  `json:"favorite_count"`
 	CommentCount  int64  `json:"comment_count"`
 	IsFavorite    bool   `json:"is_favorite"`
+	IsCollect     bool   `json:"is_collect"`
 	Title         string `json:"title"`
+	CollectCount  int64  `json:"collect_count"`
 }
 
 var video_result []struct {
@@ -41,7 +42,10 @@ var video_result []struct {
 	FavoriteCount int64  `json:"favorite_count"`
 	CommentCount  int64  `json:"comment_count"`
 	IsFavorite    bool   `json:"is_favorite"`
-	Title         string `json:"title"`
+	IsCollect     bool   `json:"is_collect"`
+
+	Title        string `json:"title"`
+	CollectCount int64  `json:"collect_count"`
 }
 
 // VideoDao 即数据访问对象，直接对指定的“某个数据源”的增删改查的封装（这里是对video的增删改查）
@@ -59,10 +63,11 @@ func NewVideoDaoInstance() *VideoDao {
 
 // 查，获取视频列表
 func (videoDao *VideoDao) GetPublishList(UserID int64) ([]common.Video, error) {
-	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count," +
+	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count,video.collect_count," +
 		" video.author_id,user.username as name,user.follow_count,user.follower_count," +
 		" IFNULL( (SELECT 1 FROM	favorite WHERE favorite.user_id = " + fmt.Sprintf("%v", UserID) + " and favorite.video_id = video.id LIMIT 1) , false ) as is_favorite," +
-		" IFNULL( (SELECT 1 FROM	fans WHERE fans.fans_id = " + fmt.Sprintf("%v", UserID) + " and fans.blogger_id = 1 LIMIT 1) , false ) as is_follow" +
+		" IFNULL( (SELECT 1 FROM	fans WHERE fans.fans_id = " + fmt.Sprintf("%v", UserID) + " and fans.blogger_id = 1 LIMIT 1) , false ) as is_follow," +
+		" IFNULL( (SELECT 1 FROM	collect WHERE collect.user_id = " + fmt.Sprintf("%v", UserID) + " and collect.video_id = video.id LIMIT 1) , false ) as is_collect" +
 		" from user join video" +
 		" on video.author_id = user.id" +
 		" order by video.create_time"
@@ -78,41 +83,30 @@ func (videoDao *VideoDao) GetPublishList(UserID int64) ([]common.Video, error) {
 		VideoList[i].PlayUrl = video_result[i].PlayUrl
 		VideoList[i].CoverUrl = video_result[i].CoverUrl
 		VideoList[i].IsFavorite = video_result[i].IsFavorite
+		VideoList[i].IsCollect = video_result[i].IsCollect
+
 		VideoList[i].Title = video_result[i].Title
 		VideoList[i].CommentCount = video_result[i].CommentCount
 		VideoList[i].FavoriteCount = video_result[i].FavoriteCount
+		VideoList[i].CollectCount = video_result[i].CollectCount
+
 	}
 	return VideoList, nil
 }
 
-func (videoDao VideoDao) GetVideos(amount int, UserID any, LatestTime int64) ([]common.Video, int64, error) {
+func (videoDao VideoDao) Feedalluser(UserID any) ([]common.Video, error) {
+
 	var VideoListSQL string
-	var NextTimeSQL string
-	if UserID == -1 {
-		VideoListSQL = "select video.id , video.play_url,video.cover_url,video.favorite_count,video.comment_count,video.title, video.author_id,user.username as name,user.follow_count," +
-			" user.follower_count" +
-			" from video inner join user" +
-			" on author_id = user.id" +
-			" where UNIX_TIMESTAMP(video.create_time) > " + strconv.FormatInt(LatestTime, 10) +
-			" order by video.create_time limit " + strconv.Itoa(amount)
-	} else {
-		VideoListSQL = " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count," +
-			" video.author_id,user.username as name,user.follow_count,user.follower_count," +
-			" IFNULL( (SELECT 1 FROM	favorite WHERE favorite.user_id = " + fmt.Sprintf("%v", UserID) + " and favorite.video_id = video.id LIMIT 1) , false ) as is_favorite," +
-			" IFNULL( (SELECT 1 FROM	fans WHERE fans.fans_id = " + fmt.Sprintf("%v", UserID) + " and fans.blogger_id = 1 LIMIT 1) , false ) as is_follow" +
-			" from user join video" +
-			" on video.author_id = user.id" +
-			" where UNIX_TIMESTAMP(video.create_time) > " + strconv.FormatInt(LatestTime, 10) +
-			" order by video.create_time  LIMIT " + strconv.Itoa(amount)
-	}
-	NextTimeSQL = " select UNIX_TIMESTAMP(video.create_time) as time" +
-		" from video inner join user" +
-		" on author_id = user.id" +
-		" where UNIX_TIMESTAMP(video.create_time)>" + strconv.FormatInt(LatestTime, 10) +
-		" order by time limit 1," + strconv.Itoa(amount-1)
+	VideoListSQL = " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count,video.collect_count," +
+		" video.author_id,user.username as name,user.follow_count,user.follower_count," +
+		" IFNULL( (SELECT 1 FROM	favorite WHERE favorite.user_id = " + fmt.Sprintf("%v", UserID) + " and favorite.video_id = video.id LIMIT 1) , false ) as is_favorite," +
+		" IFNULL( (SELECT 1 FROM	fans WHERE fans.fans_id = " + fmt.Sprintf("%v", UserID) + " and fans.blogger_id = 1 LIMIT 1) , false ) as is_follow," +
+		" IFNULL( (SELECT 1 FROM	collect WHERE collect.user_id = " + fmt.Sprintf("%v", UserID) + " and collect.video_id = video.id LIMIT 1) , false ) as is_collect" +
+		" from user join video" +
+		" on video.author_id = user.id" +
+		" order by video.create_time "
+
 	Db.Raw(VideoListSQL).Scan(&video_result)
-	var NextTime int64
-	Db.Raw(NextTimeSQL).Scan(&NextTime)
 	var VideoList = make([]common.Video, len(video_result))
 	for i := 0; i < len(video_result); i++ {
 		VideoList[i].Author.Id = video_result[i].AuthorId
@@ -124,17 +118,19 @@ func (videoDao VideoDao) GetVideos(amount int, UserID any, LatestTime int64) ([]
 		VideoList[i].PlayUrl = video_result[i].PlayUrl
 		VideoList[i].CoverUrl = video_result[i].CoverUrl
 		VideoList[i].IsFavorite = video_result[i].IsFavorite
+		VideoList[i].IsCollect = video_result[i].IsCollect
 		VideoList[i].Title = video_result[i].Title
 		VideoList[i].CommentCount = video_result[i].CommentCount
 		VideoList[i].FavoriteCount = video_result[i].FavoriteCount
+		VideoList[i].CollectCount = video_result[i].CollectCount
 	}
-	return VideoList, NextTime, nil
+	return VideoList, nil
 }
 
 func (videoDao VideoDao) GetLikeList(MyID int64, UserID int64) ([]common.Video, error) {
 
 	var res []result
-	VideoListSQL := "select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count ," +
+	VideoListSQL := "select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count ,video.collect_count," +
 		" video.author_id,user.username as name,user.follow_count,user.follower_count,1 as is_favorite," +
 		" IFNULL( (SELECT 1 FROM fans WHERE fans.fans_id =  " + fmt.Sprintf("%v", MyID) +
 		" and fans.blogger_id =  " + fmt.Sprintf("%v", UserID) +
@@ -158,6 +154,7 @@ func (videoDao VideoDao) GetLikeList(MyID int64, UserID int64) ([]common.Video, 
 		VideoList[i].Title = res[i].Title
 		VideoList[i].CommentCount = res[i].CommentCount
 		VideoList[i].FavoriteCount = res[i].FavoriteCount
+		VideoList[i].CollectCount = video_result[i].CollectCount
 	}
 	return VideoList, nil
 }
@@ -184,7 +181,7 @@ func (videoDao *VideoDao) Addvideo(authorId int64, playUrl string, coverUrl stri
 
 // 查，获取视频列表
 func (videoDao *VideoDao) GetVideosbytag(Tag string) ([]common.Video, error) {
-	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count," +
+	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count,video.collect_count," +
 		" video.author_id,user.username as name,user.follow_count,user.follower_count" +
 		" from user join video" +
 		" on video.author_id = user.id" +
@@ -208,13 +205,14 @@ func (videoDao *VideoDao) GetVideosbytag(Tag string) ([]common.Video, error) {
 		VideoList[i].Title = video_result[i].Title
 		VideoList[i].CommentCount = video_result[i].CommentCount
 		VideoList[i].FavoriteCount = video_result[i].FavoriteCount
+		VideoList[i].CollectCount = video_result[i].CollectCount
 	}
 	return VideoList, nil
 }
 
 // 查，获取视频列表
 func (videoDao *VideoDao) GetallVideos() ([]common.Video, error) {
-	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count," +
+	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count,video.collect_count," +
 		" video.author_id,user.username as name,user.follow_count,user.follower_count" +
 		" from user join video" +
 		" on video.author_id = user.id" +
@@ -235,13 +233,14 @@ func (videoDao *VideoDao) GetallVideos() ([]common.Video, error) {
 		VideoList[i].Title = video_result[i].Title
 		VideoList[i].CommentCount = video_result[i].CommentCount
 		VideoList[i].FavoriteCount = video_result[i].FavoriteCount
+		VideoList[i].CollectCount = video_result[i].CollectCount
 	}
 	return VideoList, nil
 }
 
 // 查，获取视频列表
 func (videoDao *VideoDao) GetVideosbyuserid(Tag string) ([]common.Video, error) {
-	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count," +
+	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count,video.collect_count," +
 		" video.author_id,user.username as name,user.follow_count,user.follower_count" +
 		" from user join video" +
 		" on video.author_id = user.id" +
@@ -265,12 +264,13 @@ func (videoDao *VideoDao) GetVideosbyuserid(Tag string) ([]common.Video, error) 
 		VideoList[i].Title = video_result[i].Title
 		VideoList[i].CommentCount = video_result[i].CommentCount
 		VideoList[i].FavoriteCount = video_result[i].FavoriteCount
+		VideoList[i].CollectCount = video_result[i].CollectCount
 	}
 	return VideoList, nil
 }
 
 func (videoDao *VideoDao) GetVideosbyusername(Username string) ([]common.Video, error) {
-	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count," +
+	VideoListSQL := " select video.id,video.play_url,video.cover_url,video.title,video.comment_count,video.favorite_count,video.collect_count," +
 		" video.author_id,user.username as name,user.follow_count,user.follower_count" +
 		" from user join video" +
 		" on video.author_id = user.id" +
@@ -293,6 +293,8 @@ func (videoDao *VideoDao) GetVideosbyusername(Username string) ([]common.Video, 
 		VideoList[i].Title = video_result[i].Title
 		VideoList[i].CommentCount = video_result[i].CommentCount
 		VideoList[i].FavoriteCount = video_result[i].FavoriteCount
+		VideoList[i].CollectCount = video_result[i].CollectCount
+		VideoList[i].IsCollect = false
 	}
 	return VideoList, nil
 }
