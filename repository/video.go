@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gorm.io/gorm"
 	"sync"
+	"log"
 )
 
 var (
@@ -15,7 +16,7 @@ var (
 // 相关数据访问对象,封装增删改查
 type result = struct {
 	Id            int64  `json:"id"`
-	AuthorId      int64  `json:"author_id"`
+	AuthorId      int64  `json:"author_id"` 
 	Name          string `json:"name"`
 	FollowCount   int64  `json:"follow_count"`
 	FollowerCount int64  `json:"follower_count"`
@@ -320,4 +321,37 @@ func (videoDao *VideoDao) UpdateVideoDetails(videoID string, title, description,
 	}
 
 	return nil
+}
+
+func (videoDao *VideoDao) AddVideo(Title, Description, Tag, PlayURL, CoverURL string, AuthorID int64) (int64, error) {
+    // 一个事务
+	tx := Db.Begin()
+
+	defer func() {
+		if r := recover(); r != nil {
+			log.Println("回滚")
+			tx.Rollback()
+		}
+	}()
+
+	if tx.Error != nil {
+		log.Println("事务开启异常")
+	}
+
+	video := &Video{Title: Title, Description: Description, Tag: Tag, PlayUrl: PlayURL, CoverUrl: CoverURL, AuthorID: AuthorID}
+	if err := tx.Table("video").Create(video).Error; err != nil {
+		log.Println("插入 video 数据时出错：", err)
+		tx.Rollback()
+		return -1, err
+	}
+	videoID := video.ID
+
+	uservideo := &UserVideo{UserID: AuthorID, VideoID: videoID}
+	if err := tx.Table("user_video").Create(uservideo).Error; err != nil {
+		log.Println("插入 user_video 数据时出错：", err)
+		tx.Rollback()
+		return -1, err
+	}
+	tx.Commit()
+	return videoID, nil
 }

@@ -32,7 +32,19 @@ type Video struct {
 	CreateTime    time.Time `gorm:"column:create_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"create_time"`
 	UpdateTime    time.Time `gorm:"column:update_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"update_time"`
 	IsDeleted     int       `gorm:"column:is_deleted;default:0;NOT NULL" json:"is_deleted"` // (0-, 1-)
+	Tag			  string    `gorm:"column:tag" json:"tag"`									// 标签 
 	CollectCount  int       `gorm:"column:collect_count;NOT NULL" json:"collect_count"`     // 收藏数
+}
+
+// `user_video`
+type UserVideo struct {
+	ID            int64     `gorm:"column:id;AUTO_INCREMENT;primary_key" json:"id"`       // id
+	UserID      int64     `gorm:"column:user_id;NOT NULL" json:"user_id"`           // 作者id
+	VideoID      int64     `gorm:"column:video_id;NOT NULL" json:"video_id"`           // 视频id
+	IsFavorite    int       `gorm:"column:is_favorite;default:0;NOT NULL" json:"is_favorite"` // (0-, 1-)
+	CreateTime    time.Time `gorm:"column:create_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"create_time"`
+	UpdateTime    time.Time `gorm:"column:update_time;default:CURRENT_TIMESTAMP;NOT NULL" json:"update_time"`
+	IsDeleted     int       `gorm:"column:is_deleted;default:0;NOT NULL" json:"is_deleted"` // (0-, 1-)
 }
 
 // Fans 粉丝表

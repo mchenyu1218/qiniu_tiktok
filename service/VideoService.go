@@ -73,3 +73,11 @@ func UpdateVideo(videoID string, title, description, tag string) error {
 	}
 	return error
 }
+
+func InsertVideo(title, description, tag, playURL, coverURL string, authorID int64) (int64, error) {
+	videoID, error := videoDao.AddVideo(title, description, tag, playURL, coverURL, authorID)
+	if(error != nil){
+		log.Println("videoDao.Insert 出错")
+	}
+	return videoID, error
+}

@@ -29,6 +29,7 @@ func SetRouter() *gin.Engine {
 
 	apiRouter.POST("/deleteVideo", controller.DeleteByVideoID)
 	apiRouter.POST("/updateVideo", controller.UpdateByVideoID)
+	apiRouter.POST("/insertVideo", controller.InsertVideo)
 
 	apiRouter.POST("/user/register", controller.Register)
 	apiRouter.POST("/user/login", controller.Login)
