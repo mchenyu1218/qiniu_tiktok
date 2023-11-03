@@ -3,9 +3,10 @@ package repository
 import (
 	common "Projectdouy/commom"
 	"fmt"
+	"github.com/huichen/wukong/types"
 	"gorm.io/gorm"
-	"sync"
 	"log"
+	"sync"
 )
 
 var (
@@ -16,7 +17,7 @@ var (
 // 相关数据访问对象,封装增删改查
 type result = struct {
 	Id            int64  `json:"id"`
-	AuthorId      int64  `json:"author_id"` 
+	AuthorId      int64  `json:"author_id"`
 	Name          string `json:"name"`
 	FollowCount   int64  `json:"follow_count"`
 	FollowerCount int64  `json:"follower_count"`
@@ -323,8 +324,34 @@ func (videoDao *VideoDao) UpdateVideoDetails(videoID string, title, description,
 	return nil
 }
 
+func (videoDao *VideoDao) SelectVideoById(videoID int64) (common.Video, error) {
+	var video common.Video
+	var temp result
+	selectSQL := "SELECT * FROM video WHERE id = ?"
+	// 使用Scan方法将查询结果填充到video结构体中
+	err := Db.Raw(selectSQL, videoID).Scan(&temp).Error
+	if err != nil {
+		return common.Video{}, err
+	}
+	video.Author.Id = temp.AuthorId
+	video.Author.FollowCount = temp.FollowCount
+	video.Author.FollowerCount = temp.FollowerCount
+	video.Author.Name = temp.Name
+	video.Author.IsFollow = temp.IsFollow
+	video.Id = temp.Id
+	video.PlayUrl = temp.PlayUrl
+	video.CoverUrl = temp.CoverUrl
+	video.IsFavorite = temp.IsFavorite
+	video.Title = temp.Title
+	video.CommentCount = temp.CommentCount
+	video.FavoriteCount = temp.FavoriteCount
+	video.CollectCount = temp.CollectCount
+	video.IsCollect = temp.IsCollect
+	return video, nil
+}
+
 func (videoDao *VideoDao) AddVideo(Title, Description, Tag, PlayURL, CoverURL string, AuthorID int64) (int64, error) {
-    // 一个事务
+	// 一个事务
 	tx := Db.Begin()
 
 	defer func() {
@@ -353,5 +380,11 @@ func (videoDao *VideoDao) AddVideo(Title, Description, Tag, PlayURL, CoverURL st
 		return -1, err
 	}
 	tx.Commit()
+
+	Searcher.IndexDocument(uint64(videoID), types.DocumentIndexData{
+		Content: video.Description, // Weibo结构体见上文的定义。必须是UTF-8格式。
+	}, false)
+	Searcher.FlushIndex()
+
 	return videoID, nil
 }

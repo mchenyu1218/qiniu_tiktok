@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"github.com/huichen/wukong/engine"
+	"github.com/huichen/wukong/types"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -8,6 +10,7 @@ import (
 // 定义全局的db对象，我们执行数据库操作主要通过他实现。
 // 不用担心协程并发使用同样的db对象会共用同一个连接，db对象在调用他的方法的时候会从数据库连接池中获取新的连接
 var Db *gorm.DB
+var Searcher = engine.Engine{}
 
 // 包初始化函数，golang特性，每个包初始化的时候会自动执行init函数，这里用来初始化gorm。
 func init() {
@@ -28,5 +31,11 @@ func init() {
 	//设置数据库连接池参数
 	sqlDB.SetMaxOpenConns(100) //设置数据库连接池最大连接数
 	sqlDB.SetMaxIdleConns(20)  //连接池最大允许的空闲连接数，如果没有sql任务需要执行的连接数大于20，超过的连接会被连接池关闭。
-
+	Searcher.Init(types.EngineInitOptions{
+		SegmenterDictionaries: "data/dictionary.txt",
+		StopTokenFile:         "data/stop_tokens.txt",
+		IndexerInitOptions: &types.IndexerInitOptions{
+			IndexType: types.DocIdsIndex,
+		},
+	})
 }

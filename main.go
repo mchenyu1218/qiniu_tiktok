@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "Projectdouy/docs"
+	//_ "Projectdouy/docs"
 	"Projectdouy/route"
 	"gorm.io/gorm"
 )

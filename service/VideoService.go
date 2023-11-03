@@ -4,6 +4,7 @@ import (
 	common "Projectdouy/commom"
 	"Projectdouy/repository"
 	"fmt"
+	"github.com/huichen/wukong/types"
 	"log"
 )
 
@@ -76,8 +77,30 @@ func UpdateVideo(videoID string, title, description, tag string) error {
 
 func InsertVideo(title, description, tag, playURL, coverURL string, authorID int64) (int64, error) {
 	videoID, error := videoDao.AddVideo(title, description, tag, playURL, coverURL, authorID)
-	if(error != nil){
+	if error != nil {
 		log.Println("videoDao.Insert 出错")
 	}
 	return videoID, error
+}
+
+func SelectVideo(videoID int64) (common.Video, error) {
+	video, error := videoDao.SelectVideoById(videoID)
+	if error != nil {
+		log.Println("videoDao.select 出错")
+	}
+	return video, error
+}
+
+func SearchVideo(query string) ([]common.Video, error) {
+	response := repository.Searcher.Search(types.SearchRequest{
+		Text:      query,
+		Orderless: false,
+	})
+
+	var VideoList = make([]common.Video, len(response.Docs))
+	for i := 0; i < len(response.Docs); i++ {
+		temp, _ := videoDao.SelectVideoById(int64(response.Docs[i].DocId))
+		VideoList = append(VideoList, temp)
+	}
+	return VideoList, nil
 }
