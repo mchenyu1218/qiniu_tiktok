@@ -15,7 +15,16 @@ type RelationActionRequest struct {
 	ActionType int `form:"action_type" json:"action_type" validator:"required,gt=0,lt=3"`
 }
 
-// RelationAction 关注
+// @Summary	进行点赞操作，1点赞2取消
+// @Produce	json
+// @Param		user_id	query		int64				false	"用户id"
+// @Param		token	query		string				false	"验证信息"
+// @Param		to_user_id		query		int64			false	"博主id"
+// @Param		ActionType	query		int				false	"行动目标"
+// @Success	200		{object}	common.Response        "成功"
+// @Failure	400		{object}	common.Response	"请求错误"
+// @Failure	500		{object}	common.Response	"内部错误"
+// @Router		/relation/action [post]
 func RelationAction(c *gin.Context) {
 	var request RelationActionRequest
 	var response = &common.Response{}

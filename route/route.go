@@ -37,6 +37,8 @@ func SetRouter() *gin.Engine {
 	apiRouter.POST("/user/login", controller.Login)
 	apiRouter.POST("/user/modeify", controller.Usermodify)
 
+	apiRouter.POST("/publish/action/:UserID", controller.Publish)
+
 	apiRouter.GET("/user/search/:UserID", controller.UserInfo)
 	//收藏该视频
 

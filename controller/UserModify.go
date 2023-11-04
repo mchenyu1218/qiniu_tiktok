@@ -20,6 +20,15 @@ type UserModifyResponse struct {
 	Token  string `json:"token" binding:"required"`
 }
 
+// @Summary 修改用户密码
+// @Produce	json
+// @Param		username	query		string				false	"用户名"
+// @Param		oldpassword	query		string				false	"旧的密码"
+// @Param		newpassword	query		string				false	"新的密码"
+// @Success	200		{object}	UserModifyResponse        "成功"
+// @Failure	400		{object}	UserModifyResponse	"请求错误"
+// @Failure	500		{object}	UserModifyResponse	"内部错误"
+// @Router		/user/modeify  [post]
 func Usermodify(c *gin.Context) {
 	var request UserModifyRequest
 	if err := c.Bind(&request); err != nil {

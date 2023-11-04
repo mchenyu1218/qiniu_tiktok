@@ -167,17 +167,35 @@ func (videoDao *VideoDao) Addvideo(authorId int64, playUrl string, coverUrl stri
 		PlayUrl:  "http://" + playUrl,
 		Title:    title,
 	}
-	// 重复视频校验（没做）
+
 	err := Db.Transaction(func(tx *gorm.DB) error {
 		// 在事务中执行一些 db 操作（从这里开始，您应该使用 'tx' 而不是 'db'）
-		if err := tx.Create(newVideo).Error; err != nil {
+		if err := tx.Table("video").Create(newVideo).Error; err != nil {
 			// 返回任何错误都会回滚事务
 			return err
 		}
-		// 返回 nil 提交事务
+		var maxID int64
+		result := tx.Table("video").Select("MAX(id)").Scan(&maxID)
+		if result.Error != nil {
+			panic(result.Error)
+
+		}
+		newVideo2 := &UserVideo{
+			UserID:  authorId,
+			VideoID: maxID,
+		}
+
+		result2 := tx.Table("user_video").Create(newVideo2)
+
+		if result2.Error != nil {
+			panic(result2.Error)
+		}
 		return nil
+
 	})
+
 	return err
+
 }
 
 // 查，获取视频列表

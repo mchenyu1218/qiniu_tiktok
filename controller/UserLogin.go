@@ -19,6 +19,14 @@ type UserLoginResponse struct {
 	Token  string `json:"token" binding:"required"`
 }
 
+// @Summary 用户登录
+// @Produce	json
+// @Param		username	query		int64				false	"用户id"
+// @Param		password	query		string				false	"验证信息"
+// @Success	200		{object}	UserLoginResponse        "成功"
+// @Failure	400		{object}	UserLoginResponse	"请求错误"
+// @Failure	500		{object}	UserLoginResponse	"内部错误"
+// @Router		/user/login  [post]
 func Login(c *gin.Context) {
 	var request UserLoginRequest
 	if err := c.Bind(&request); err != nil {

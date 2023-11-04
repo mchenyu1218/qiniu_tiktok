@@ -19,6 +19,14 @@ type UserInfoResponse struct {
 	User common.UserIn
 }
 
+// @Summary	获取用户信息，同时查询是否关注该用户
+// @Produce	json
+// @Param		user_id	query		int64				false	"用户id"
+// @Param		token	query		string				false	"验证信息"
+// @Success	200		{object}	common.Response        "成功"
+// @Failure	400		{object}	common.Response	"请求错误"
+// @Failure	500		{object}	common.Response	"内部错误"
+// @Router		/user/search/:UserID  [get]
 func UserInfo(c *gin.Context) {
 	userId, err := strconv.Atoi(c.Query("user_id"))
 	var response = &UserInfoResponse{}
