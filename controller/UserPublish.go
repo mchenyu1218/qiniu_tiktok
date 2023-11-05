@@ -79,13 +79,12 @@ func Publish(c *gin.Context) {
 
 		// 视频剪切
 		fileUrl := "http://s38oif2dm.hn-bkt.clouddn.com/" + videoName
-		tmpCoverUrl := "tmpCover/" + coverName
-		err2 := ffmpeg.Input(fileUrl, ffmpeg.KwArgs{"ss": "1"}).
+		tmpCoverUrl := coverName
+		err = ffmpeg.Input(fileUrl, ffmpeg.KwArgs{"ss": "1"}).
+			// "s": "320x240", "pix_fmt": "rgb24", "t": "3", "r": "3"
 			Output(tmpCoverUrl, ffmpeg.KwArgs{"s": "368x208", "pix_fmt": "rgb24", "t": "1", "r": "1"}).
-			OverWriteOutput().
-			ErrorToStdOut().
-			Run()
-		if err2 != nil {
+			OverWriteOutput().ErrorToStdOut().Run()
+		if err != nil {
 			log.Fatal(err)
 		}
 		// 文件转换为字节流文件
