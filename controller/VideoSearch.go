@@ -20,6 +20,18 @@ type VideoSearchResponse struct {
 	VideoList []common.Video `json:"video_list"` //视频列表
 }
 
+// @Summary 进行偶所
+// @Produce	json
+// @Param		title	query		string		false	"标签"
+// @Param		description	query	string		false	"描述"
+// @Param		tag	query	query   string		false	"标签"
+// @Param		play_url	query	string		false	"视频url"
+// @Param		cover_url	query	string		false	"封面url"
+// @Param		author_id	query	int64		false	"用户id"
+// @Success	200		{object}	VideoSearchResponse        "成功"
+// @Failure	400		{object}	VideoSearchResponse	"请求错误"
+// @Failure	500		{object}	VideoSearchResponse	"内部错误"
+// @Router		/insertVideo  [post]
 func SearchVideo(c *gin.Context) {
 	var request VideoSearchRequest
 	if err := c.Bind(&request); err != nil {

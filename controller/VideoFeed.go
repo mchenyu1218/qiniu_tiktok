@@ -25,6 +25,12 @@ type VideoFeedResponse struct {
 	NextTime  int64          `json:"next_time"`
 }
 
+// @Summary 获取所有视频
+// @Produce	json
+// @Success	200		{object}	VideoFeedResponse        "成功"
+// @Failure	400		{object}	VideoFeedResponse	"请求错误"
+// @Failure	500		{object}	VideoFeedResponse	"内部错误"
+// @Router		/feedallvideo  [get]
 func Feed(c *gin.Context) {
 
 	var response = &VideoFeedResponse{}
@@ -44,6 +50,13 @@ func Feed(c *gin.Context) {
 	c.JSON(200, response)
 }
 
+// @Summary 根绝tag获取视频
+// @Produce	json
+// @Param		tag	query		string		false	"类别"
+// @Success	200		{object}	VideoFeedResponse        "成功"
+// @Failure	400		{object}	VideoFeedResponse	"请求错误"
+// @Failure	500		{object}	VideoFeedResponse	"内部错误"
+// @Router		/feedbytag  [get]
 func FeedByTag(c *gin.Context) {
 
 	var response = &VideoFeedResponse{}
@@ -69,6 +82,13 @@ func FeedByTag(c *gin.Context) {
 	c.JSON(200, response)
 }
 
+// @Summary 根绝username获取视频
+// @Produce	json
+// @Param		username	query		string		false	"用户名"
+// @Success	200		{object}	VideoFeedResponse        "成功"
+// @Failure	400		{object}	VideoFeedResponse	"请求错误"
+// @Failure	500		{object}	VideoFeedResponse	"内部错误"
+// @Router		/feedbyusername  [get]
 func Feedbyusername(c *gin.Context) {
 
 	var response = &VideoFeedResponse{}
@@ -94,6 +114,16 @@ func Feedbyusername(c *gin.Context) {
 	c.JSON(200, response)
 }
 
+// @Summary 根绝username获取视频
+// @Produce	json
+// @Param		user_id	query		int64		false	"用户名"
+// @Param		latest_time	query	int64		false	"最后时间"
+// @Param		token	query	string		false	"验证信息"
+// @Param		tag	query	string		false	"验证信息"
+// @Success	200		{object}	VideoFeedResponse        "成功"
+// @Failure	400		{object}	VideoFeedResponse	"请求错误"
+// @Failure	500		{object}	VideoFeedResponse	"内部错误"
+// @Router		/feedalluser  [get]
 func Feedalluser(c *gin.Context) {
 	var request VideoFeedRequest
 	//参数绑定
@@ -105,7 +135,7 @@ func Feedalluser(c *gin.Context) {
 	var response = &VideoFeedResponse{}
 	response.StatusCode = 0
 	response.StatusMsg = "success"
-	fmt.Print("dasd")
+
 	fmt.Print(request.UserID)
 	//查询当前用户下所有视频
 	VideoList, error := service.Feedalluser(request.UserID)

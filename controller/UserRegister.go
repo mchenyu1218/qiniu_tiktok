@@ -19,6 +19,14 @@ type UserRegisterResponse struct {
 	Token  string `json:"token" binding:"required"`
 }
 
+// @Summary 用户注册
+// @Produce	json
+// @Param		username	query		string				false	"用户名"
+// @Param		password	query		string				false	"密码"
+// @Success	200		{object}	UserRegisterResponse        "成功"
+// @Failure	400		{object}	UserRegisterResponse	"请求错误"
+// @Failure	500		{object}	UserRegisterResponse	"内部错误"
+// @Router		/user/register  [post]
 func Register(c *gin.Context) {
 	var request UserRegisterRequest
 	//接收参数

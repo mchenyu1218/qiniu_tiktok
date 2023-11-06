@@ -42,6 +42,8 @@ func UserInfo(c *gin.Context) {
 	userVO.Name = user.Username
 	userVO.FollowCount = int64(user.FollowCount)
 	userVO.FollowerCount = int64(user.FollowerCount)
+	userVO.Face = user.Face
+
 	// 设置is_follow属性：
 	//   1.获取 发起当前请求的用户的信息
 	// 		a.如果是未登录的用户，is_follow的值应该为false；

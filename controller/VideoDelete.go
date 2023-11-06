@@ -19,6 +19,14 @@ type VideoDeleteResponse struct {
 	common.Response
 }
 
+// @Summary 根据video_id删除相关视频
+// @Produce	json
+// @Param		username	query		string				false	"用户名"
+// @Param		password	query		string				false	"密码"
+// @Success	200		{object}	UserRegisterResponse        "成功"
+// @Failure	400		{object}	UserRegisterResponse	"请求错误"
+// @Failure	500		{object}	UserRegisterResponse	"内部错误"
+// @Router		/deleteVideo  [post]
 func DeleteByVideoID(c *gin.Context) {
 	var request VideoDeleteRequest
 	if err := c.Bind(&request); err != nil {
