@@ -33,8 +33,8 @@ export default {
     return {
       Darkorlight:"夜间模式",
       menuData: [
-        {id: 1,menuName: "个人中心",iconname: "el-icon-s-custom",},
-        {id: 2,menuName: "首页",iconname: "el-icon-s-grid",},
+        {id: 1,menuName: "首页",iconname: "el-icon-monitor",},
+        {id: 2,menuName: "个人中心",iconname: "el-icon-s-custom",},
         {id: 3,menuName: "分类",iconname: "el-icon-s-grid",},
         // {id: 4,menuName: "浏览记录",iconname: "el-icon-s-order",},
         {id: 4,menuName: "设置",iconname: "el-icon-s-tools",},

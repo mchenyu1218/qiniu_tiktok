@@ -10,18 +10,21 @@
         </div>
         <div class="heartbutton">
             <!-- @click="heartButton" -->
-            <button class="btn3" >
+            <button class="btn3" @click="heartbutton">
             </button>
+            <span class="undernumber">{{ favorite_count }}</span>
         </div>
         <div class="starbutton">
             <!-- @click="starButton" -->
             <button class="btn4" >
             </button>
+            <span class="undernumber">{{ collect_count }}</span>
         </div>
         <div class="reviewbutton">
             <!-- @click="reviewButton" -->
             <button class="btn5" >
             </button>
+            <span class="undernumber">{{ comment_count }}</span>
         </div>
         <div class="sharebutton">
             <!-- @click="shareButton" -->
@@ -38,13 +41,39 @@
     export default {
 
         name: 'IconList',
+        data() {
+            return {
+                video_detail:[],
+                heart:0,
+                like:0,
+                share:0
+            }
+        },
+        props:['favorite_count','collect_count','comment_count'],
         methods:{
             upButton(){
                 this.$bus.$emit('up')
             },
             downButton(){
                 this.$bus.$emit('down')
+            },
+            heartbutton(){
+                
             }
+        },
+        async mounted(){
+            await this.$axios({
+            method: "get",
+            url: "http://localhost:8080/api/tiktok/feedallvideo",
+            })
+            .then((reponse) =>{
+                const res=JSON.parse(JSON.stringify(reponse.data.video_list))
+                this.video_detail=res
+                // console.log(this.video_detail);
+            })
+            .catch((error)=>{
+                console.log(error.message);
+            })
         }
     }
 </script>
@@ -54,6 +83,10 @@
     .buttonlists {
         /* background-color: grey; */
         width: 30px;
+    }
+
+    .buttonlists div{
+        /* border:1px solid red; */
     }
 
     .buttonlists .btn1{
@@ -120,6 +153,17 @@
     } */
     button:hover{
         cursor:  pointer;
+    }
+
+
+    .undernumber{
+        color:white;
+        display: inline-block;
+        text-align: center;
+        width:30px;
+        font-size: 10px;
+        /* background-color: black; */
+        float:left;
     }
 
 </style>
