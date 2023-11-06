@@ -4,83 +4,22 @@
             <div class="publishuser">
                 <div class="pubname">
                     <img src="../assets/light.jpg">
-                    <span class="pubusername">daadad</span> 
+                    <span class="pubusername">moyang</span> 
                     <button class="pubstar">关注</button>
                 </div>
             </div>  
         </div>
-        <div class="reviewsum">评论(10)</div>
+        <div class="reviewsum">评论(1)</div>
         <div class="reviewlists">
             <div class="review">
                 <div class="reviewitem">
-                    <div class="reviewname"><img src="../assets/light.jpg"><span>daadad</span> <span class="reviewdate">11-1</span></div>
-                    <div class="reviewcontent">这是一段评论这是一段评论这是一段评论这是一段评论这是一段评论这是一段评论</div>
+                    <div class="reviewname"><img src="../assets/light.jpg"><span>02nv</span> <span class="reviewdate">11-1</span></div>
+                    <div class="reviewcontent">打的真好真妙！棒棒棒</div>
                 </div>
                 <hr />
             </div>
-            <div class="review">
-                <div class="reviewitem">
-                    <div class="reviewname"><img src="../assets/light.jpg"><span>daadad</span> <span class="reviewdate">11-1</span></div>
-                    <div class="reviewcontent">这是一段评论这是一段评论这是一段评论这是一段评论</div>
-                </div>
-                <hr />
-            </div>
-            <div class="review">
-                <div class="reviewitem">
-                    <div class="reviewname"><img src="../assets/light.jpg"><span>daadad</span> <span class="reviewdate">11-1</span></div>
-                    <div class="reviewcontent">这是一段评论这是一段评论</div>
-                </div>
-                <hr />
-            </div>
-            <div class="review">
-                <div class="reviewitem">
-                    <div class="reviewname"><img src="../assets/light.jpg"><span>daadad</span> <span class="reviewdate">11-1</span></div>
-                    <div class="reviewcontent">这是一段评论这是一段评论这是一段评论这是一段评论这是一段评论这是一段评论</div>
-                </div>
-                <hr />
-            </div>
-            <div class="review">
-                <div class="reviewitem">
-                    <div class="reviewname"><img src="../assets/light.jpg"><span>daadad</span> <span class="reviewdate">11-1</span></div>
-                    <div class="reviewcontent">这是一段评论这是一段评论</div>
-                </div>
-                <hr />
-            </div>
-            <div class="review">
-                <div class="reviewitem">
-                    <div class="reviewname"><img src="../assets/light.jpg"><span>daadad</span> <span class="reviewdate">11-1</span></div>
-                    <div class="reviewcontent">这是一段评论这是一段评论</div>
-                </div>
-                <hr />
-            </div>
-            <div class="review">
-                <div class="reviewitem">
-                    <div class="reviewname"><img src="../assets/light.jpg"><span>daadad</span> <span class="reviewdate">11-1</span></div>
-                    <div class="reviewcontent">这是一段评论这是一段评论</div>
-                </div>
-                <hr />
-            </div>
-            <div class="review">
-                <div class="reviewitem">
-                    <div class="reviewname"><img src="../assets/light.jpg"><span>daadad</span> <span class="reviewdate">11-1</span></div>
-                    <div class="reviewcontent">这是一段评论这是一段评论</div>
-                </div>
-                <hr />
-            </div>
-            <div class="review">
-                <div class="reviewitem">
-                    <div class="reviewname"><img src="../assets/light.jpg"><span>daadad</span> <span class="reviewdate">11-1</span></div>
-                    <div class="reviewcontent">这是一段评论这是一段评论</div>
-                </div>
-                <hr />
-            </div>
-            <div class="review">
-                <div class="reviewitem">
-                    <div class="reviewname"><img src="../assets/light.jpg"><span>daadad</span> <span class="reviewdate">11-1</span></div>
-                    <div class="reviewcontent">这是一段评论这是一段评论</div>
-                </div>
-                <hr />
-            </div>
+            
+            
         </div>
 
     </div>
@@ -90,7 +29,6 @@
 <script>
     export default {
         name: 'VideoDetailsright',
-
     }
 </script>
 

@@ -103,8 +103,12 @@
         this.isuserpage=data
         this.$bus.$emit('showpage','new');
       })
-      
-
+    },
+    
+    beforeDestroy(){
+        this.$bus.$off('showpage'),
+        this.$bus.$off('userpage'),
+        this.$bus.$off('newvediopage')
     }
   }
 </script>

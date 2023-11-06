@@ -14,6 +14,7 @@
 
 
 <script>
+
     import VideoList from '../components/VideoList.vue'
     import VideoDetailsright from '../components/VideoDetailsright.vue'
     // import VideoCategory from '../components/VideoCategory.vue'

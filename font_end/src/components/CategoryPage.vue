@@ -1,17 +1,23 @@
 <template>
     <div class="pagelists">
         <div class="navigationbar">
-            <div v-for="cate in catepages" :key="cate.id" class="navbar" >
+            <!-- <div v-for="cate in catepages" :key="cate.id" class="navbar" :name="cate.target" @click="showdetailvideobytarget(cate.target)">
+                <button>{{ cate.menuName }}</button>
+            </div> -->
+            <div  class="navbar" @click="showdetailvideobytarget('hot')"><button>热门</button></div>
+            <div  class="navbar" @click="showdetailvideobytarget('sports')"><button>体育</button></div>
+            <div v-for="cate in catepages" :key="cate.id" class="navbar" :name="cate.target" @click="showdetailvideobytarget(cate.target)">
                 <button>{{ cate.menuName }}</button>
             </div>
         </div>
         <hr>
         <div class="navigationdetails">
             <div v-for="show in showdetailsvedio" :key="show.id" class="showdetails" >
-                <video :src="show.path" @click="showcurvedio(show)"></video>
+                <video :src="show?.play_url" @click="showcurvedio(show)"></video>
                 <div class="showimganddetail">
-                    <img src="../assets/light.jpg" alt="">
-                    <span>一只鸡的故事一只鸡的故事一只鸡的故事一只鸡的故事</span>
+                    <img :src="showface(show?.author.id)" alt="">
+                    <!-- <span >{{ show?.author.id }} </span> -->
+                    <span>{{ show?.author.name }}</span>
                 </div>
                 
             </div>
@@ -21,14 +27,16 @@
 
 
 <script>
-
+    // import {gettag} from '../api/vedio'
     export default{
         name:'CategoryPage',
         data() {
             return {
+                target:'hot',
+                Userid:'',
                 catepages: [
-                    {id: 1,menuName: "热门"},
-                    {id: 2,menuName: "体育"},
+                    // {id: 1,menuName: "热门",target:'hot'},
+                    // {id: 2,menuName: "体育",target:'sport'},
                     {id: 3,menuName: "音乐"},
                     {id: 4,menuName: "舞蹈"},
                     {id: 5,menuName: "美食"},
@@ -47,28 +55,94 @@
                     {id:18,menuName: "VLOG"},
                     {id:19,menuName: "其他"},
                 ],
-                showdetailsvedio:[
-                    {id: '001',path: 'http://s38oif2dm.hn-bkt.clouddn.com/547fe704fa852affa69b06a9535ecd7e.mp4',title: ''},
-                    {id: '002',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
-                    {id: '003',path: 'http://s38oif2dm.hn-bkt.clouddn.com/547fe704fa852affa69b06a9535ecd7e.mp4',title: ''},
-                    {id: '004',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
-                    {id: '005',path: 'http://s38oif2dm.hn-bkt.clouddn.com/547fe704fa852affa69b06a9535ecd7e.mp4',title: ''},
-                    {id: '006',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
-                    {id: '007',path: 'http://s38oif2dm.hn-bkt.clouddn.com/547fe704fa852affa69b06a9535ecd7e.mp4',title: ''},
-                    {id: '008',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
-                    {id: '009',path: 'http://s38oif2dm.hn-bkt.clouddn.com/547fe704fa852affa69b06a9535ecd7e.mp4',title: ''},
-                    {id: '010',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
-                    {id: '011',path: 'http://s38oif2dm.hn-bkt.clouddn.com/547fe704fa852affa69b06a9535ecd7e.mp4',title: ''},
-                    {id: '012',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
-                    {id: '013',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
-                ]
+                showdetailsvedio:[],
+
+                // showdetailsvedio:[
+                //     {id: '001',path: 'http://s38oif2dm.hn-bkt.clouddn.com/547fe704fa852affa69b06a9535ecd7e.mp4',title: ''},
+                //     {id: '002',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
+                //     {id: '003',path: 'http://s38oif2dm.hn-bkt.clouddn.com/547fe704fa852affa69b06a9535ecd7e.mp4',title: ''},
+                //     {id: '004',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
+                //     {id: '005',path: 'http://s38oif2dm.hn-bkt.clouddn.com/547fe704fa852affa69b06a9535ecd7e.mp4',title: ''},
+                //     {id: '006',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
+                //     {id: '007',path: 'http://s38oif2dm.hn-bkt.clouddn.com/547fe704fa852affa69b06a9535ecd7e.mp4',title: ''},
+                //     {id: '008',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
+                //     {id: '009',path: 'http://s38oif2dm.hn-bkt.clouddn.com/547fe704fa852affa69b06a9535ecd7e.mp4',title: ''},
+                //     {id: '010',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
+                //     {id: '011',path: 'http://s38oif2dm.hn-bkt.clouddn.com/547fe704fa852affa69b06a9535ecd7e.mp4',title: ''},
+                //     {id: '012',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
+                //     {id: '013',path: 'http://s38oif2dm.hn-bkt.clouddn.com/86fdfcd94f621fb29ef8172dd9ec68f5.mp4',title: ''},
+                // ]
             }
         },
         methods:{
             showcurvedio(id){
                 this.$bus.$emit('showcurvedio',id);
+            },
+            showdetailvideobytarget(target){
+                this.target=target
+                // console.log('target=',this.target);
+            },
+            showface(faceid){
+                this.Userid=faceid
+                // console.log(this.userid);
             }
-        }
+        },
+        async mounted(){
+            // console.log('adasdas',this.target);
+            // const tagres=await gettag(this.target)
+            // this.showdetailsvedio=tagres.data.video_list
+            
+            // setTimeout(() => {
+            //     // console.log(this.Userid);
+            //     // const searchuserbyid=getuser(1672489513669,this.Userid)
+
+            //     // console.log('adfa',searchuserbyid);
+            // }, 500);
+            
+            // await this.$axios({
+            //     method: "get",
+            //     url: "http://localhost:8080/api/tiktok/feedbytag?tag="+this.target,
+            //     })
+            //     .then((reponse) =>{
+            //         console.log("ta=",this.target);
+            //         const res=JSON.parse(JSON.stringify(reponse.data.video_list))
+            //         this.showdetailsvedio=res
+            //         console.log(res);
+            //     })
+            //     .catch((error)=>{
+            //         console.log(error.message);
+            //     })
+        },
+        watch:{
+            target:{
+                handler(newVal){
+                    this.target=newVal
+                    this.$axios({
+                        method: "get",
+                        url: "http://localhost:8080/api/tiktok/feedbytag?tag="+newVal,
+                        })
+                        .then((reponse) =>{
+                            // console.log("ta=",this.target);
+                            const res=JSON.parse(JSON.stringify(reponse.data.video_list))
+                            this.showdetailsvedio=res
+                            // console.log(res);
+                        })
+                        .catch((error)=>{
+                            console.log(error.message);
+                    })
+                },
+                immediate:true,
+                deep:true
+            },
+            showdetailsvedio :{
+                handler(){
+                    // console.log('this.showdetailsvedio',newVal);
+
+                },
+                immediate:true,
+                deep:true
+            }   
+        },
     }
 
 
@@ -151,6 +225,7 @@
         text-align: center;
         width: 85%;
         cursor: pointer;
+        height: 100%;
     }
 
     .navigationdetails .showdetails img{

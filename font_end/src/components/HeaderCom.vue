@@ -1,7 +1,7 @@
 <template>
     <div class="context">
         <div class="headertitle">
-            <div class="title">Web短视频页面</div>
+            <div class="title">HMHTOK</div>
         </div>
         <div class="headersearch">
             <el-input v-model="input" placeholder="请输入内容" class="searchinput"></el-input>
@@ -9,8 +9,8 @@
         <div class="headersign">
            <!-- <span class="login">登录</span>
             <span class="signin">注册</span> -->
-            <el-button type="success" class="signin" style="margin-right:30px;" >注册</el-button>
-            <el-button type="danger" class="login" style="margin-right:15px;">登录</el-button>
+            <el-button type="success" class="signin" style="margin-right:30px;" >退出</el-button>
+            <el-button type="danger" class="login" style="margin-right:15px;">hyn</el-button>
         </div>
     </div>
     
