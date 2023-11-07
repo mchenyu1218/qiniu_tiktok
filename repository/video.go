@@ -208,7 +208,7 @@ func (videoDao *VideoDao) GetVideosbytag(Tag string) ([]common.Video, error) {
 		" order by video.create_time"
 	fmt.Sprint(VideoListSQL)
 	fmt.Sprint(Tag)
-
+	fmt.Println("我查了数据库")
 	Db.Raw(VideoListSQL).Scan(&video_result)
 	var VideoList = make([]common.Video, len(video_result))
 	for i := 0; i < len(video_result); i++ {

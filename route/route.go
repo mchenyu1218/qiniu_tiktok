@@ -33,6 +33,8 @@ func SetRouter() *gin.Engine {
 	apiRouter.GET("/searchVideo", controller.SearchVideo)
 	apiRouter.GET("/selectVideo", controller.SelectByVideoID)
 
+	apiRouter.GET("/testCache", controller.GetCache)
+
 	apiRouter.POST("/user/register", controller.Register)
 	apiRouter.POST("/user/login", controller.Login)
 	apiRouter.POST("/user/modeify", controller.Usermodify)
