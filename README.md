@@ -21,9 +21,8 @@ Go, Mysql, Redis, Node18
 6. 启动项目：
     ```base
     go run main.go
-
 ### 架构图
-![image](structure.png)
+![image](https://github.com/mchenyu1218/qiniu_tiktok/blob/main/images/structure.PNG)
 
 ### API文档
 1. /tiktok/feedallvideo 不用传入参数，查找出所有的视频
